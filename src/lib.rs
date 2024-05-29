@@ -65,6 +65,7 @@ fn compute_witness<G1, G2>(
     private_input: HashMap<String, Value>,
     witness_generator_file: FileLocation,
     witness_generator_output: &Path,
+    circuit_bin: &Path
 ) -> Vec<<G1 as Group>::Scalar>
 where
     G1: Group<Base = <G2 as Group>::Scalar>,
@@ -91,6 +92,7 @@ where
             &witness_generator_file,
             &input_json,
             &witness_generator_output,
+            &circuit_bin,
         )
     } else {
         let witness_generator_file = match &witness_generator_file {
@@ -135,6 +137,7 @@ where
         generate_witness_from_wasm::<F<G1>>(
             &witness_generator_file,
             &input_json,
+            &circuit_bin,
         )
         .await
     } else {
@@ -159,6 +162,7 @@ pub fn create_recursive_circuit<G1, G2>(
     private_inputs: Vec<HashMap<String, Value>>,
     start_public_input: Vec<F<G1>>,
     pp: &PublicParams<G1, G2, C1<G1>, C2<G2>>,
+    circuit_bin: &Path,
 ) -> Result<RecursiveSNARK<G1, G2, C1<G1>, C2<G2>>, std::io::Error>
 where
     G1: Group<Base = <G2 as Group>::Scalar>,
@@ -180,6 +184,7 @@ where
         private_inputs[0].clone(),
         witness_generator_file.clone(),
         &witness_generator_output,
+        circuit_bin
     );
 
     let circuit_0 = CircomCircuit {
@@ -203,6 +208,7 @@ where
             private_inputs[i].clone(),
             witness_generator_file.clone(),
             &witness_generator_output,
+            circuit_bin
         );
 
         let circuit = CircomCircuit {
@@ -314,6 +320,7 @@ pub fn continue_recursive_circuit<G1, G2>(
     private_inputs: Vec<HashMap<String, Value>>,
     start_public_input: Vec<F<G1>>,
     pp: &PublicParams<G1, G2, C1<G1>, C2<G2>>,
+    circuit_bin: &Path
 ) -> Result<(), std::io::Error>
 where
     G1: Group<Base = <G2 as Group>::Scalar>,
@@ -338,6 +345,7 @@ where
             private_inputs[i].clone(),
             witness_generator_file.clone(),
             &witness_generator_output,
+            circuit_bin,
         );
 
         let circuit = CircomCircuit {

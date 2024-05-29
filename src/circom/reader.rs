@@ -43,6 +43,7 @@ pub fn generate_witness_from_wasm<Fr: PrimeField>(
     witness_wasm: &FileLocation,
     witness_input_json: &String,
     witness_output: &Path,
+    circuit_bin: &Path,
 ) -> Vec<Fr> {
     let witness_wasm = match witness_wasm {
         FileLocation::PathBuf(path) => path,
@@ -55,13 +56,14 @@ pub fn generate_witness_from_wasm<Fr: PrimeField>(
 
     let witness_js = Path::new(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/src/circom/wasm_deps/generate_witness.js"
+        "/src/circom/wasm_deps/generate_witness.mjs"
     ));
     let output = Command::new("node")
         .arg(witness_js)
         .arg(witness_wasm)
         .arg(&witness_generator_input)
         .arg(witness_output)
+        .arg(circuit_bin)
         .output()
         .expect("failed to execute process");
     if output.stdout.len() > 0 || output.stderr.len() > 0 {

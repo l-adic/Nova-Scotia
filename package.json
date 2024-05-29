@@ -1,0 +1,7 @@
+{
+  "name": "nova-scotia",
+  "version": "1.0.0",
+  "devDependencies": {
+    "circom_runtime": "github:l-adic/circom_runtime#bbfe3eeb68e18dfcb4d5e24668e536b030741e31"
+  }
+}
