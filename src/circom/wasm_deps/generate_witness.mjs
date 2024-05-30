@@ -8,7 +8,6 @@ if (process.argv.length != 6) {
     "Usage: node generate_witness.js <file.wasm> <input.json> <output.wtns> <circuit.bin>"
   );
 } else {
-  console.log(process.argv)
   const input = JSON.parse(readFileSync(process.argv[3], "utf8"));
   const buffer = readFileSync(process.argv[2]);
   const wasi = new WASI({
